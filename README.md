@@ -6,7 +6,7 @@ Supplement to the paper Queiroz et al. (2020, Biotropica).
 
 Authors: Joel A. Queiroz, Ugo M. Diniz, Diego P. Vázquez, Zelma M. Quirino, Francisco A.R. Santos, Marco A.R. Mello, Isabel C. Machado.
 
-E-mail: imachado@ufpe.br. 
+E-mail: marmello@usp.br. 
 
 Published on October 2nd, 2020 (English version).
 
