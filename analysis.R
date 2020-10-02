@@ -167,12 +167,10 @@ Mod.sig <- sum(modnull>(Mod@likelihood)) / length(modnull) # p value
 Mod.sig
 
 #Plot the observed value against the distribution of randomized values
-png("specialization.png", width = 3000, height = 3000, res = 300)
 plot(density(modnull), main="Observed vs. randomized",
      xlim=c(min((Mod@likelihood), min(modnull)), 
             max((Mod@likelihood), max(modnull))))
 abline(v=Mod@likelihood, col="red", lwd=2, xlab="")
-dev.off()
 
 
 Mod@likelihood #observed
@@ -196,12 +194,10 @@ Spec.sig <- sum(randomized.Spec>Spec)/length(randomized.Spec) # p value
 Spec.sig
 
 #Plot the observed value against the distribution of randomized values
-png("specialization.png", width = 3000, height = 3000, res = 300)
 plot(density(randomized.Spec), main="Observed vs. randomized",
      xlim=c(min((Spec), min(randomized.Spec)), 
             max((Spec), max(randomized.Spec))))
 abline(v=Spec, col="red", lwd=2, xlab="")
-dev.off()
 
 Spec #observed
 mean(randomized.Spec) #randomized mean
@@ -223,12 +219,10 @@ Nest.sig <- sum(randomized.Nest>Nest)/length(randomized.Nest) # p value
 Nest.sig
 
 #Plot the observed value against the distribution of randomized values
-png("nestedness.png", width = 3000, height = 3000, res = 300)
 plot(density(randomized.Nest), main="Observed vs. randomized",
      xlim=c(min((Nest), min(randomized.Nest)), 
             max((Nest), max(randomized.Nest))))
 abline(v=Nest, col="red", lwd=2, xlab="")
-dev.off()
 
 Nest #observed
 mean(randomized.Nest) #randomized mean
