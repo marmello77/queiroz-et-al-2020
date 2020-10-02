@@ -20,7 +20,7 @@ Disclaimer: You may freely use the software and data provided here for commercia
 
 ## Functionality and origin
 
-The data, scripts, and functions provided here aim at making or study fully reproducible. You will find code to reproduce both the analysis and the figures, as well as the main supplementary material. We've also added some bonus material related to data visualization.
+The data, scripts, and functions provided here aim at making or study fully reproducible. You will find code to reproduce both the analysis and the figures, as well as the main supplementary material. We have also added some bonus material related to data visualization.
 
 
 ## List of folders and files
@@ -87,9 +87,9 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 1. Run the script "analysis.R" and follow the steps provided in it;
 
-2. You can also run specific sections of the script to reproduce specific analyses, but beware of dependences between some sections.
+2. You can also run specific sections of the script to reproduce specific results, but beware of dependences between some sections.
 
-3. The analyses based on Monte Carlo simulations can be quite resource-consuming. Check your computer's power and memory before setting the number of permutations. If you want to analyze some data for real using our script, consider that you'll need at least 1,000 permutations. If you want only to explore some data, 10 permutations will do it.
+3. The analyses based on Monte Carlo simulations can be quite resource-consuming. Check your computer's power and memory before setting the number of permutations. If you want to analyze your own data for real, consider that you will need at least 1,000 permutations. If you want only to explore your data, 10 permutations will do it.
 
 4. If have any questions, corrections, or suggestions, please feel free to open an *issue* or make a *pull request*.
 
@@ -109,7 +109,7 @@ The codes used in this repo have borrowed solutions from other repos developed b
 
 ## Acknowledgments
 
-We thank our colleagues, who helped us at different stages of this project. Special thanks go to Renata Muylaert, Pavel Dodonov, Gabriel Felix, and Rafael Pinheiro, who, together with us, developed the additional functions and scripts used here. We also thank our sponsors, mainly Brazilian and German science funding agencies, who supported our study through grants, fellowships, and scholarships. Last, but not least, we thank the [Stack Overflow Community](https://stackoverflow.com), where we solve most of our coding dilemmas.
+We thank our colleagues, who helped us at different stages of this project. Special thanks go to Renata Muylaert, Pavel Dodonov, Gabriel Felix, and Rafael Pinheiro, who, together with us, developed the additional functions and scripts used here. We also thank our sponsors, mostly Brazilian and German science funding agencies, who gave us grants, fellowships, and scholarships. Last, but not least, we thank the [Stack Overflow Community](https://stackoverflow.com), where we solve most of our coding dilemmas.
 
 
 ## Reference
