@@ -1,2 +1,2 @@
-# queirozetal2020
+# queiroz_et_al_2020
 Supplements to the paper Queiroz et al. (2020, Biotropica)
