@@ -87,9 +87,9 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 1. Run the script "analysis.R" and follow the steps provided in it;
 
-2. You can also run only some sections of the script to reproduce specific analyses, but beware of dependences between sections.
+2. You can also run specific sections of the script to reproduce specific analyses, but beware of dependences between some sections.
 
-3. The analyses based on Monte Carlo simulations can be quite memory-consuming. Check your computer's power before setting the number of permutations. If you want to analyze some data for real using our script, consider that you'll need at least 1,000 permutations. If you want only to explore some data, 10 will do it.
+3. The analyses based on Monte Carlo simulations can be quite resource-consuming. Check your computer's power and memory before setting the number of permutations. If you want to analyze some data for real using our script, consider that you'll need at least 1,000 permutations. If you want only to explore some data, 10 permutations will do it.
 
 4. If have any questions, corrections, or suggestions, please feel free to open an *issue* or make a *pull request*.
 
