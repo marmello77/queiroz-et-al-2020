@@ -109,7 +109,7 @@ The codes used in this repo have borrowed solutions from other repos developed b
 
 ## Acknowledgments
 
-We thank our colleagues, who helped us at different stages of this project. Special thanks go to Renata Muylaert, Pavel Dodonov, Gabriel Felix, and Rafael Pinheiro, who, together with us, developed the additional functions and scripts used here. We also thank our sponsors, mostly Brazilian and German science funding agencies, who gave us grants, fellowships, and scholarships. Last, but not least, we thank the [Stack Overflow Community](https://stackoverflow.com), where we solve most of our coding dilemmas.
+We thank our colleagues, who helped us at different stages of this project. Special thanks go to Renata Muylaert, Pavel Dodonov, Gabriel Felix, and Rafael Pinheiro, who, together with us, developed the additional functions and scripts used here. We also thank our sponsors, especially the Alexander von Humboldt-Stiftung, CNPq, CAPES, and FAPESP, who gave us grants, fellowships, and scholarships. Last, but not least, we thank the [Stack Overflow Community](https://stackoverflow.com), where we solve most of our coding dilemmas.
 
 
 ## Reference
