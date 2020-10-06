@@ -1,0 +1,13 @@
+base
+igraph
+permute
+lattice
+vegan
+statnet.common
+network
+sna
+bipartite
+plyr
+Rmisc
+gdata
+ggplot2

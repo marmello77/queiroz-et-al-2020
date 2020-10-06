@@ -1,0 +1,837 @@
+---
+title: "Queiroz et al. 2020"
+author: "Marco Mello"
+date: "10/6/2020"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+knitr::knit_hooks$set(inline = function(x) {
+prettyNum(x, big.mark=",")
+})
+```
+
+Supplement to the paper Queiroz *et al*. (2020, Biotropica).
+
+[Ecological Synthesis Lab](https://marcomellolab.wordpress.com) (SintECO).
+
+Authors: Joel A. Queiroz, Ugo M. Diniz, Diego P. Vázquez, Zelma M. Quirino, Francisco A.R. Santos, Marco A.R. Mello, Isabel C. Machado.
+
+See [README](https://github.com/marmello77/queiroz_et_al_2020/blob/main/README.md) for further info.
+
+This tutorial is aimed at facilitating full reproductibility of the analyses and figures presented in our paper.
+
+
+## Summary
+
+[Set the stage](#stage)
+
+[Process the network](#process)
+
+[Figure 1](#fig1)
+
+[Figure 2](#fig2)
+
+[Figure S2 (topology)](#figs2)
+
+[Figure 3 (centrality)](#fig3)
+
+[Figure 4](#fig4)
+
+[Figure S1](#figs1)
+
+
+################################################################################
+
+
+## Set the stage{#stage}
+
+Set the working directory:
+
+```{r}
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+```
+
+
+Delete all previous objects:
+
+```{r}
+rm(list= ls())
+```
+
+
+Load the required packages:
+
+```{r}
+library(igraph)
+library(bipartite)
+library(Rmisc)
+library(vegan)
+library(gdata)
+library(ggplot2)
+library(gridExtra)
+library(grid)
+```
+
+
+Load the custom-made functions:
+
+```{r}
+source("RestNullModel.R")
+source("PosteriorProb.R")
+source("MyDiamond.R")
+```
+
+
+################################################################################
+
+
+## Process the network{#process}
+
+
+Import the network:
+
+```{r}
+data <- as.matrix(read.delim("data/network.txt", row.names=1))
+```
+
+
+Plot the matrix to have a first impression about the network's structure:
+
+```{r}
+visweb(data)
+```
+
+
+Convert the network to igraph format:
+
+```{r}
+data2 <- graph_from_incidence_matrix(data, directed = F, weighted = TRUE) 
+```
+
+
+Inform which nodes represent which taxonomic groups:
+
+```{r}
+V(data2)$set[1:nrow(data)] = c("Moths",	"Moths", "Bats",	"Bats",	"Moths",	"Moths",
+                       "Moths",	"Moths",	"Moths",	"Bats",	"Bats",	"Moths",
+                       "Moths",	"Moths",	"Moths",	"Moths",	"Moths",
+                       "Moths",	"Moths")
+V(data2)$set[(nrow(data)+1):(nrow(data)+ncol(data))] = "Plants"
+```
+
+
+################################################################################
+
+
+## Figure 1{#fig1}
+
+This figure was made in [Photoshop](https://www.adobe.com) as a panel of photos taken in the field. Therefore, it is not reproducible by code
+
+
+################################################################################
+
+
+## Figure 2{#fig2}
+
+This is the graph that represents the nocturnal pollination network studied.
+
+The original graph was made in [Gephi](https://gephi.org), so it is reproducible only by pseudocode. Here we describe the steps needed to reproduce it
+
+In the next section we provide also code to plot a similar graph in R.
+
+
+### Pseudocode to reproduce Figure 2 in Gephi
+
+
+1. Prepare the data that will be fed to Gephi:
+
+    a. “vertices.csv” (folder "figure2") containing vertex data. Each row corresponds to a vertex, and each column, a descriptor. Contains the columns "Id" (vertex ID), “Label” (certex code), “timeset” (left blank), “Polygon” (the shape of the vertex, the number represents the number of sides of the polygon) and “syndrome” (a discreet variable representing chiropterophily, sphingophily, other syndromes, unidentified species or pollinators).
+
+    b. “edges.csv” (folder "figure2") containing edge data. Each row corresponds to an interaction. Contain the columns “Source” and “Target” - the two interacting species – “Type” (directed or undirected), “Id”, “label” (left blank), “timeset” (left blank), and “weight” (interaction frequency).
+    
+2. Open Gephi, click “Tools” in the upper left corner and select “Plugins”. Search for the plugin “Polygon Shaped Nodes” and install it. When successfully installed, restart Gephi. 
+
+3. Head to Data Laboratory and select “Import Spreadsheet”. Import first the “vertices.csv” file as a Nodes table, selecting comma as a separator. Click ‘next’. Make sure both “Polygon” and “Syndrome” are marked as integers, then click “Finish”. Select Graph Type “undirected” and click “OK”. 
+
+4. Import the “edges.csv” file as an Edges table, selecting comma as a separator. Click “next”. Make sure that “Weight” is marked as an integer and click “finish”. Mark “Append to existing workplace” to associate the edges with the vertices already imported. 
+
+5. Head to Overview. In the Appearance tap on the left side of the window, click “Nodes”, select “Partition”, and choose “Syndrome” as partition. Click the squares to manually tweak node color by syndrome. Note that pollinators do not fit into syndromes and are represented by zeros. 
+
+6. Still in Nodes, switch to node size (icon containing growing circles), select “Unique”, and change node size according to preference. In the “Edge” section, click “Unique” and then click the square to choose edge color. Click “Apply” below to make changes effective. 
+
+7. In the central part of the Overview window, change node position according to preference. The positions intended for our work are such that modules (identified by the network analysis in R) are visually clear.
+
+8. Head to Preview. In Presets, select “Default Straight”. In the Node Label section, check “Show labels” and choose label font and size. In the Edges section, check “Show edges”, select “original” in Color, and uncheck “Curved”. Any other setting in the Preview window may be changed according to preference. 
+
+9. Export file in preferred format. Module polygons were drawn in an image editing software, to which SVG format is optimal.
+
+
+### Code to reproduce Figure 2 in R
+
+We are going to use the same igraph object prepared before:
+
+```{r}
+data2
+```
+
+
+Set an energy-minimization layout: 
+
+```{r}
+lay1 <- layout_nicely(data2)
+```
+
+
+Set edge mode and width:
+
+```{r}
+E(data2)$arrow.mode = 0
+E(data2)$width = E(data2)$weight/5+1
+```
+
+
+Import the "diamond" vertex shape:
+
+```{r}
+source("MyDiamond.R")
+```
+
+
+Set vertex shapes: 
+
+```{r}
+V(data2)$shape = V(data2)$set
+V(data2)$shape = gsub("Bats","diamond",V(data2)$shape)
+V(data2)$shape = gsub("Moths","square",V(data2)$shape)
+V(data2)$shape = gsub("Plants","circle",V(data2)$shape)
+```
+
+
+Calculate the Louvain modularity (resolution = 1.0). 
+
+At this resolution, this algorithm gives very similar results as DIRT_LPA+ (Beckett modularity). Nevertheless, by running this analysis with the *igraph* package, it is easier to plot the graph with clouds representing the modules. We did not find a similar solution using outputs from the *bipartite* package.
+
+```{r}
+data2.lou = cluster_louvain(data2)
+```
+
+
+Set node and cloud colors by modularity:
+
+```{r}
+colrs <- rainbow(length(data2.lou), alpha = 1.0, s = 1, v = 0.8)
+V(data2)$color <- colrs[data2.lou$membership]
+clouds = rainbow(length(data2.lou), alpha = 0.1)
+```
+
+
+### Plot **Figure 2**:
+
+```{r fig2, fig.height=10, fig.width=10, cache=FALSE, out.width='\\textwidth', fig.align='center'}
+par(mfrow=c(1,1),mar=c(1,1,1,5))
+plot(data2.lou,
+     data2,
+     col = V(data2)$color,
+     mark.border="lightgrey", 
+     mark.col=clouds,
+     vertex.size=7.5,
+     vertex.label=V(data2)$name,
+     vertex.label.color="white",
+     vertex.label.cex=.6,
+     edge.color = adjustcolor("grey", alpha.f = .5),
+     edge.curved=0.3,
+     edge.width = 3,
+     layout=lay1)
+legend(x = 0.9,y = 1.0, legend = c("Bats", "Moths", "Plants"),
+       pch = c(18,15,19),  title="Taxon",
+       text.col = "gray20", title.col = "black",
+       box.lwd = 0, cex = 2, col=c("grey", "grey", "grey"))
+par(mfrow=c(1,1))
+```
+
+
+
+################################################################################
+
+
+## Figure S2{#topology}
+
+Here we are going to reproduce the topological analysis of the nocturnal networks. It takes several steps.
+
+In the end, we are going to reproduce Figure S2, provided in the supplementary material, which represents the compound topology of the network.
+
+
+First, set the number of permutations to be used in all null model analyses.
+
+Consider that this kind of analysis is very resource-consuming. So have in mind your comoputer's power and memory, before setting this value.
+
+```{r}
+permutations <- 10
+```
+
+
+Generate randomized matrices using the Vázquez null model:
+
+```{r, cache = TRUE}
+nulls <- nullmodel(data, N=permutations, method="vaznull")
+```
+
+
+### Modularity
+
+Calculate modularity (DIRT_LPA+) for the observed network:
+
+```{r}
+Mod <- computeModules(data, method = "Beckett")
+```
+
+Extract module membership:
+
+```{r}
+Part <- bipartite::module2constraints(Mod)
+row.Part <- Part[1:nrow(data)]
+col.Part <- Part[(nrow(data)+1):(nrow(data)+ncol(data))]
+```
+
+
+Calculate modularity for the randomized networks:
+
+```{r, , cache = TRUE}
+nullmod <- sapply(nulls, computeModules, method = "Beckett")
+modnull <- sapply(nullmod, function(x) x@likelihood)
+(Mod@likelihood - mean(modnull))/sd(modnull) # Z value
+Mod.sig <- sum(modnull>(Mod@likelihood)) / length(modnull) # p value
+```
+
+
+Now let us plot the observed value against the distribution of randomized values.
+
+If the observed value (red line) falls much **higher** than the randomized values (black curve), it means that the topology in question might be a good explanation for the structure of the network, as it is much higher than expected by chance. 
+
+If the observed value falls much **lower** then than randomized values, it means that the topology in question is probably a poor explanation for the structure of the networks, as it is much lower than expected by chance.
+
+Nevertheless, keep in mind that, on the one hand, the score of a network for a given topological metric is one of its intrinsic properties. On the other hand, the p-value estimated using a null model is a different property. Therefore, it is meaningless to think black-and-white in terms of the network being nested or not, modular or not, specialized or not. Those properties are continuous and intrinsic. The chance of a particula score having emerged by chance is a another story.
+
+Plot the curve:
+
+```{r modularity}
+plot(density(modnull), main="Observed vs. randomized",
+     xlim=c(min((Mod@likelihood), min(modnull)), 
+            max((Mod@likelihood), max(modnull))))
+abline(v=Mod@likelihood, col="red", lwd=2, xlab="")
+```
+
+
+Estimate the p-values:
+
+```{r}
+Mod@likelihood #observed
+mean(modnull) #randomized mean
+sd(modnull) #randomized SD
+(Mod@likelihood - mean(modnull))/sd(modnull) # Z-value
+sum(modnull>(Mod@likelihood)) / length(modnull) #randomized > observed
+sum(modnull<(Mod@likelihood)) / length(modnull) #randomized < observed
+```
+
+
+### Specialization 
+
+Calculate specialization (H2') for the observed network:
+
+```{r}
+Spec <- networklevel(data, index="H2")
+```
+
+
+Calculate specialization for the randomized networks:
+
+```{r, cache = TRUE}
+randomized.Spec <- unlist(sapply(nulls, networklevel, index="H2"))
+(Spec - mean(randomized.Spec))/sd(randomized.Spec) # Z value
+Spec.sig <- sum(randomized.Spec>Spec)/length(randomized.Spec) # p value
+```
+
+
+Plot the observed value against the distribution of randomized values:
+
+```{r specialization}
+plot(density(randomized.Spec), main="Observed vs. randomized",
+     xlim=c(min((Spec), min(randomized.Spec)), 
+            max((Spec), max(randomized.Spec))))
+abline(v=Spec, col="red", lwd=2, xlab="")
+```
+
+
+Estimate the p-values:
+
+```{r}
+Spec #observed
+mean(randomized.Spec) #randomized mean
+sd(randomized.Spec) #randomized SD
+(Spec - mean(randomized.Spec))/sd(randomized.Spec) # Z-value
+sum(randomized.Spec>(Spec)) / length(randomized.Spec) #randomized > observed
+sum(randomized.Spec<(Spec)) / length(randomized.Spec) #randomized < observed
+```
+
+
+### Nestedness
+
+#Calculate nestedness (WNODF) for the observed network:
+
+```{r}
+Nest <- networklevel(data, index="weighted NODF")
+```
+
+Calculate nestedness for the randomized networks:
+
+```{r, cache = TRUE}
+randomized.Nest <- unlist(sapply(nulls, networklevel, index="weighted NODF"))
+(Nest - mean(randomized.Nest))/sd(randomized.Nest) # Z value
+Nest.sig <- sum(randomized.Nest>Nest)/length(randomized.Nest) # p value
+```
+
+
+Plot the observed value against the distribution of randomized values:
+
+```{r nestedness}
+plot(density(randomized.Nest), main="Observed vs. randomized",
+     xlim=c(min((Nest), min(randomized.Nest)), 
+            max((Nest), max(randomized.Nest))))
+abline(v=Nest, col="red", lwd=2, xlab="")
+```
+
+
+Estimate the p-values:
+
+```{r}
+Nest #observed
+mean(randomized.Nest) #randomized mean
+sd(randomized.Nest) #randomized SD
+(Nest - mean(randomized.Nest))/sd(randomized.Nest) # Z-value
+sum(randomized.Nest>(Nest)) / length(randomized.Nest) #randomized > observed
+sum(randomized.Nest<(Nest)) / length(randomized.Nest) #randomized < observed
+```
+
+
+### Compound topology 
+
+Calculate compound nestedness (using WNODA) for the observed network:
+
+```{r}
+obs.com <- unlist(bipartite::nest.smdm(x = data, 
+                                       constraints = Part, #Input the modular structured recovered from step 2
+                                       weighted = T, #By considering the edge weights, you are choosing WNODA
+                                       decreasing = "abund"))
+```
+
+
+Calculate constrained interaction probabilities considering the network's modular structure:
+
+```{r}
+Pij <- PosteriorProb(M = data, 
+                     R.partitions = row.Part, C.partitions = col.Part, #Input the modular structured recovered from step 2
+                     Prior.Pij = "degreeprob", #Choose the null model
+                     Conditional.level = "modules") #Choose the kind of constraints
+```
+
+
+Generate randomized networks with the restricted model, considering the interaction probabilities calculated before:
+ 
+```{r, cache = TRUE}
+nulls.com <- RestNullModel(M = data, 
+                           Pij.Prob = Pij, #Recover the probabilities calculated in the previous command
+                           Numbernulls = permutations, #This step may take long, so start experimenting with low values
+                           Print.null = F, 
+                           allow.degeneration = F, #Choose whether you allow orphan rows and columns to be removed or not
+                           return.nonrm.species = F, 
+                           connectance = T, byarea = T, 
+                           R.partitions = row.Part, 
+                           C.partitions = col.Part)
+```
+
+
+Calculate compound nestedness for the randomized networks:
+
+```{r, cache = TRUE}
+rest.nest <- nest.smdm(data, 
+                       constraints = Part, 
+                       weighted = T, 
+                       decreasing = "abund", 
+                       sort = T)
+
+unlist(rest.nest)
+
+null.com <- sapply(nulls.com, 
+                   function(x) bipartite::nest.smdm(x = x,
+                                                    constraints = Part, 
+                                                    weighted = T, 
+                                                    decreasing = "abund"))
+WNODA.null.com <- unlist(null.com[3,])
+WNODAsm.null.com <- unlist(null.com[8,])
+WNODAdm.null.com <- unlist(null.com[9,])
+```
+
+
+Plot the observed nestedness value against the distribution of randomized values:
+
+```{r compound1}
+par(mfrow = c(1,3))
+
+plot(density(WNODA.null.com), xlim=c(min(obs.com[3], min(WNODA.null.com)),
+                                     max(obs.com[3], max(WNODA.null.com))), 
+     main="observed vs. randomized", xlab = "WNODA matrix")
+abline(v=obs.com[3], col="red", lwd=2)
+
+plot(density(WNODAsm.null.com), xlim=c(min(obs.com[8], min(WNODAsm.null.com)),
+                                       max(obs.com[8], max(WNODAsm.null.com))), 
+     main="observed vs. randomized", xlab = "WNODAsm matrix")
+abline(v=obs.com[8], col="red", lwd=2)    
+
+plot(density(WNODAdm.null.com), xlim=c(min(obs.com[9], min(WNODAdm.null.com)),
+                                       max(obs.com[9], max(WNODAdm.null.com))), 
+     main="observed vs. randomized", xlab = "WNODAdm matrix")
+abline(v=obs.com[9], col="red", lwd=2)    
+
+par(mfrow = c(1,1))
+```
+
+
+Estimate the p-values:
+
+Nestedness in the entire network:
+
+```{r}
+praw.WNODA <- sum(WNODA.null.com>obs.com[3]) / length(WNODA.null.com)
+p.WNODA <- ifelse(praw.WNODA > 0.5, 1- praw.WNODA, praw.WNODA)    # P-value
+```
+
+
+Nestedness within the modules:
+
+```{r}
+praw.WNODAsm <- sum(WNODAsm.null.com>obs.com[8]) / length(WNODAsm.null.com)
+p.WNODAsm <- ifelse(praw.WNODAsm > 0.5, 1- praw.WNODAsm, praw.WNODAsm)    # P-value
+
+```
+
+
+Nestedness between the modules:
+
+```{r}
+praw.WNODAdm <- sum(WNODAdm.null.com>obs.com[9]) / length(WNODAdm.null.com)
+p.WNODAdm <- ifelse(praw.WNODAdm > 0.5, 1- praw.WNODAdm, praw.WNODAdm)    # P-value
+```
+
+
+Plot the compound topology: Figure S2. Now we have come to it. All previous topological analyses were needed to make this final analysis.
+
+Sort the matrix in a way that facilitates visualizing its compound topology:
+
+```{r}
+data.comp <- bipartite::sortmatrix(matrix = data, topology = "compound", 
+                                   sort_by = "weights", 
+                                   row_partitions = row.Part, 
+                                   col_partitions = col.Part)
+```
+
+
+Assign colors to the modules:
+
+```{r}
+modcol <- rainbow((length(unique(Part))), alpha=1, s = 1, v = 1)
+```
+
+
+### Plot **Figure S2**:
+
+```{r, figs2, fig.height=7, fig.width=10, cache=FALSE, out.width='\\textwidth', fig.align='center'}
+plotmatrix(data.comp$matrix, 
+           row_partitions = data.comp$row_partitions, 
+           col_partitions = data.comp$col_partitions, 
+           border = T,
+           binary = F,
+           modules_colors = modcol,
+           within_color = modcol, 
+           between_color = "lightgrey")
+```
+
+
+### Summary of the topological results
+
+
+The network has `r format(nrow(data), scientific=FALSE)` rows and `r format(ncol(data), scientific=FALSE)` columns.
+
+The network's specialization (H2) is `r format(round(Spec, 2), scientific=FALSE)`, P = `r format(round(Spec.sig, 2), scientific=FALSE)`.
+
+The network's modularity (DIRT_LPA+) is `r format(round(Mod@likelihood, 2), scientific=FALSE)`, P = `r format(round(Mod.sig, 2), scientific=FALSE)`, and it contains `r format(length(unique(Part)), scientific=FALSE)` modules.
+
+The network's nestedness (WNODF) is `r format(round(Nest/100, 2), scientific=FALSE)`, P = `r format(round(Nest.sig, 2), scientific=FALSE)`.
+
+The network shows the following scores of nestedness (WNODA):
+
+Entire network = `r format(round(rest.nest$WNODAmatrix/100, 2), scientific=FALSE)`, P = `r format(round(p.WNODA, 2), scientific=FALSE)`.
+
+Between the modules = `r format(round(rest.nest$WNODA_DM_matrix/100, 2), scientific=FALSE)`, P = `r format(round(p.WNODAdm, 2), scientific=FALSE)`.
+
+Within the modules = `r format(round(rest.nest$WNODA_SM_matrix/100, 2), scientific=FALSE)`, P = `r format(round(p.WNODAsm, 2), scientific=FALSE)`.
+
+
+################################################################################
+
+
+## Figure 3{#centrality}
+
+All analyses in this section are focused on the nodes, and not on the entire network.
+
+They are run in steps and then compiled to produce the panel of Figure 3.
+
+
+Calculate specialization (d'):
+
+```{r}
+d <- specieslevel(data,index="d")
+dplants <- d$`higher level`
+```
+
+
+Calculate betweenness centrality (BC):
+
+```{r}
+BC <- specieslevel(data, index="betweenness")
+BCplants <- BC$higher
+```
+
+
+Calculate normalized degree (nk):
+
+```{r}
+ND <-ND(data, normalised=T)
+NDplants <- ND$higher
+```
+
+
+Compare centrality metrics by pollination syndrome.
+
+Import the data:
+
+```{r}
+plants <- read.xls("data/plants.xlsx", h=T) # reading compiled spreadsheet with species & metrics classified by guild
+```
+
+Change the reference level for the GLMs:
+
+```{r}
+ord <-  ordered(plants$Guild, levels = c("sphin", "chiro", "other"))
+```
+
+### Plot **Figure 3**:
+
+```{r fig3, fig.height=7, fig.width=10, cache=FALSE, out.width='\\textwidth', fig.align='center'}
+theme_set(theme_gray(base_size = 24))
+
+pd <- ggplot(plants, aes(x=ord, y=d, fill=Guild)) + 
+  ylab("d'")+ xlab("")+ ylim(0, 0.8) +
+  scale_fill_manual(values=c("darkolivegreen1", "sandybrown", "orchid1"))+
+  geom_boxplot(width=0.5, color="black") +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
+        axis.title.y = element_text(color="black", face ="italic", size =23),
+        axis.text= element_text(color="black", size=19),
+        legend.position = "none") +
+   geom_text(x="other", y=0.8, label="A", size = 10)
+
+pnk <- ggplot(plants, aes(x=ord, y=nk, fill=Guild)) + 
+  ylab("nk")+ xlab("")+ ylim(0, 1.1) +
+  scale_fill_manual(values=c("darkolivegreen1", "sandybrown", "orchid1"))+
+  geom_boxplot(width=0.5, color="black") +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
+        axis.title.y = element_text(color="black", face ="italic", size =23),
+        axis.text= element_text(color="black", size=19),
+        legend.position = "none") +
+  geom_text(x="other", y=1.1, label="B", size = 10)
+
+pBC <- ggplot(plants, aes(x=ord, y=bc, fill=Guild)) + 
+  ylab("BC")+ xlab("")+ ylim(0, 0.15) +
+  scale_fill_manual(values=c("darkolivegreen1", "sandybrown", "orchid1"))+
+  geom_boxplot(width=0.5, color="black") +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
+        axis.title.y = element_text(color="black", face ="italic", size =23),
+        axis.text= element_text(color="black", size=19),
+        legend.position = "none") +
+  geom_text(x="other", y=0.15, label="C", size = 10)
+
+grid.arrange(pd, pnk, pBC, 
+             ncol=3,  
+             vp=viewport(width=1.0, height=0.9))
+```
+
+
+### GLMs to compare centrality by pollination syndrome
+
+Prepare the data:
+
+```{r}
+#table(plants$Guild)
+#plants$Guild <- relevel(plants$Guild, ref="chiro") #changing reference level for GLMs
+#plants$Guild <- relevel(plants$Guild, ref="sphin")
+#plants$Guild <- relevel(plants$Guild, ref="other")
+```
+
+
+d':
+
+```{r}
+glmd <- glm(plants$d ~ plants$Guild, family=quasibinomial("logit"))
+summary(glmd)
+glm_d <- anova(glmd, test = "Chisq")
+glm_d
+```
+
+
+BC:
+
+```{r}
+glmbc <- glm(plants$bc ~ plants$Guild, family=quasibinomial("logit"))
+summary(glmbc)
+glm_bc <- anova(glmbc, test = "Chisq")
+glm_bc
+```
+
+
+nk:
+
+```{r}
+glmnk <- glm(plants$nk ~ plants$Guild, family=quasibinomial("logit"))
+summary(glmnk)
+glm_k <- anova(glmnk, test = "Chisq")
+glm_k
+```
+
+
+################################################################################
+
+
+## Figure 4{#morphometry}
+
+Import the morphology data
+
+```{r}
+morph_plants<-read.xls("data/morph_pla.xlsx", h=T)
+morph_pol <- read.xls("data/morph_pol.xlsx", h=T)
+```
+
+
+Change the reference level for the GLMs:
+
+```{r}
+#morph_plants$module <- relevel(morph_plants$module, ref="bat")
+#morph_pol$module <- relevel(morph_pol$module, ref="hawk1")
+```
+
+
+### Plot **Figure 4**: 
+
+```{r fig4, fig.height=7, fig.width=10, cache=FALSE, out.width='\\textwidth', fig.align='center'}
+ggmorph<-read.xls("data/morph_graph.xlsx",h=T) 
+
+ggplot(ggmorph, aes(x=module, y=measure, fill=variable)) +
+  ylab("Measure (mm)")+ xlab("Modules")+ ylim(0, 150) +
+  scale_fill_manual(values=c("slateblue", "goldenrod1", "coral1"))+
+  geom_boxplot(width=0.5, color="black", position = position_dodge(width=0.5)) +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
+        axis.title.y = element_text(color="black", size =20),
+        axis.title.x = element_text(color="black", size =20),
+        axis.text= element_text(color="black", size=19), legend.position = "none")
+```
+
+
+### GLMs to compare morphometry by module
+
+Pollinator tongues:
+
+```{r}
+glm_pol <- glm(morph_pol$length_pol~morph_pol$module, family=gaussian())
+summary(glm_pol)
+anova(glm_pol, test = "Chisq")
+```
+
+
+Floral width (w) and length (l):
+
+```{r}
+glm_pla_l <- glm(morph_plants$length_pla~morph_plants$module, family=gaussian())
+glm_pla_w <- glm(morph_plants$width_pla~morph_plants$module, family=gaussian())
+summary(glm_pla_l)
+anova(glm_pla_l, test = "Chisq")
+summary(glm_pla_w)
+anova(glm_pla_w, test = "Chisq")
+```
+
+
+################################################################################
+
+
+## SFigure S1{#sampling}
+
+
+Load the interaction data for the Chao1 estimator:
+
+```{r}
+sampbat<- read.xls("data/sampbat.xlsx", h=T)
+estimateR(sampbat, index =c("chao")) 
+str(sampbat)
+```
+
+
+```{r}
+samphawk <- read.xls("data/samphawk.xlsx", h=T)
+estimateR(samphawk, index =c("chao"))
+str(samphawk)
+```
+
+
+Load the interaction data for drawing the rarefaction curve:
+
+```{r}
+sampling_bats <- read.xls("data/sampling_bats.xlsx", h=T)
+curve_bat<- specaccum(sampling_bats, method="rarefaction")
+```
+
+```{r}
+sampling_hawkmoths <- read.xls("data/sampling_hawkmoths.xlsx", h=T)
+curve_hawk<- specaccum(sampling_hawkmoths, method="rarefaction")
+```
+
+
+### Plot **Figure S1**:
+
+```{r figs1, fig.height=7, fig.width=10, cache=FALSE, out.width='\\textwidth', fig.align='center'}
+par(mfrow=c(1,2), oma=c(5,5,0,0))
+
+plot(curve_hawk, ci.type = "poly", xvar = "individuals", ci.lty=0, ylab = NA,
+     xlab = NA,
+     ci.col=rgb(0.7, 0, 0.2, 0.3), ylim=c(0,30))
+abline(h=22.2, lty=1, col=rgb(0.7, 0, 0.2, 0.3), lwd=2.5)
+abline(h=(22.2+0.6195203), lty=3, col=rgb(0.7, 0, 0.2, 0.3), lwd=2)
+abline(h=(22.2-0.6195203), lty=3, col=rgb(0.7, 0, 0.2, 0.3), lwd=2)
+
+plot(curve_bat, ci.type = "poly", xvar = "individuals", ci.lty=0,
+     ci.col=rgb(0, 0, 0.5, 0.3), ylim=c(0,30), ylab=NA, xlab=NA)
+abline(h=14, lty=1, col=rgb(0, 0, 0.5, 0.3), lwd=2.5)
+abline(h=(14-2.283481), lty=3, col=rgb(0, 0, 0.5, 0.3), lwd=2)
+abline(h=(14+2.283481), lty=3, col=rgb(0, 0, 0.5, 0.3), lwd=2)
+
+mtext("Number of interactions", side = 1, cex = 3, outer = T)
+mtext("Pollen type richness", side = 2, cex = 3, outer = T)
+
+
+par(mfrow=c(1,1))
+```
+
+

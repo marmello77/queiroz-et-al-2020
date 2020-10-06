@@ -32,6 +32,8 @@ library(Rmisc)
 library(vegan)
 library(gdata)
 library(ggplot2)
+library(gridExtra)
+library(grid)
 
 #Load some custom-made functions
 source("RestNullModel.R")
@@ -74,6 +76,8 @@ V(data2)$set[1:nrow(data)] = c("Moths",	"Moths", "Bats",	"Bats",	"Moths",	"Moths
                        "Moths",	"Moths")
 V(data2)$set[(nrow(data)+1):(nrow(data)+ncol(data))] = "Plants"
 
+#Set seed
+set.seed(14)
 
 
 ################################################################################
@@ -84,15 +88,9 @@ V(data2)$set[(nrow(data)+1):(nrow(data)+ncol(data))] = "Plants"
 #Set layout
 lay1 <- layout_nicely(data2)
 
-#Set edge curvatures
-curves1 = curve_multiple(data2)
-
 #Set edge mode and width
 E(data2)$arrow.mode = 0
 E(data2)$width = E(data2)$weight/5+1
-
-#Calculate Louvain modularity (resolution = 1.0, similar to DIRT_LPA+)
-data2.lou = cluster_louvain(data2)
 
 #Import "diamond" vertex shape
 source("MyTriangle.R")
@@ -102,6 +100,9 @@ V(data2)$shape = V(data2)$set
 V(data2)$shape = gsub("Bats","diamond",V(data2)$shape)
 V(data2)$shape = gsub("Moths","square",V(data2)$shape)
 V(data2)$shape = gsub("Plants","circle",V(data2)$shape)
+
+#Calculate Louvain modularity (resolution = 1.0, similar to DIRT_LPA+)
+data2.lou = cluster_louvain(data2)
 
 ##Set node and cloud colors by modularity
 colrs <- rainbow(length(data2.lou), alpha = 1.0, s = 1, v = 0.8)
@@ -134,12 +135,8 @@ dev.off()
 
 
 ################################################################################
-##### NETWORK LEVEL ANALYSIS
+##### NETWORK LEVEL ANALYSIS (TOPOLOGY)
 ################################################################################
-
-
-#Set seed
-set.seed(14)
 
 #Set the number of permutations to be used in all null model analyses
 permutations <- 1000
@@ -150,7 +147,7 @@ nulls <- nullmodel(data, N=permutations, method="vaznull")
 
 ##### MODULARITY
 
-#Calculate metric for the original network
+#Calculate modularity (DIRT_LPA+) for the original network
 Mod <- computeModules(data, method = "Beckett")
 Mod@likelihood
 
