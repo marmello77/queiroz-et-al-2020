@@ -38,7 +38,7 @@ library(grid)
 #Load some custom-made functions
 source("RestNullModel.R")
 source("PosteriorProb.R")
-source("MyTriangle.R")
+source("MyDiamond.R")
 
 
 
@@ -449,6 +449,9 @@ dev.off()
 ##### Run GLMs to compare centrality scores
 
 table(plants$Guild)
+
+plants$Guild <- factor(plants$Guild, ordered = FALSE)  
+
 plants$Guild <- relevel(plants$Guild, ref="chiro") #changing reference level for GLMs
 plants$Guild <- relevel(plants$Guild, ref="sphin")
 plants$Guild <- relevel(plants$Guild, ref="other")
@@ -504,6 +507,9 @@ morph_pol <- read.xls("data/morph_pol.xlsx", h=T)
 
 str(morph_plants)
 str(morph_pol)
+
+morph_plants$module <- factor(morph_plants$module, ordered = FALSE)
+morph_pol$module <- factor(morph_pol$module, ordered = FALSE)
 
 # Change reference level for GLMs
 morph_plants$module <- relevel(morph_plants$module, ref="bat")
