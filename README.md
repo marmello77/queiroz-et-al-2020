@@ -76,7 +76,7 @@ The data, scripts, and functions provided here aim at making or study fully repr
     e. results_topology.txt -> results of the topological analyses.
 
 
-4. analysis.R -> main script to run the analyses and plot the graphs. Best choice if you want not only to reproduce our analyses and figures, but also to aplly them to your own data.
+4. analysis.R -> main script to run the analyses and plot the graphs. Best choice if you want not only to reproduce our analyses and figures, but also to aplly our solutions to your own data.
 
 5. MyDiamond.R -> additional function to create the diamond shape used in "network.tif". We found this script on the internet some years ago, and could not identify its authors. We thank the person who wrote it, whomever it may be.
 
@@ -84,9 +84,9 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 7. RestNullModel.R -> additional function to run the compound topology analysis. See the original [repo](https://github.com/gabrielmfelix/Restricted-Null-Model).
 
-8. tutorial.Rmd -> a tutorial written in RMarkDown to help reproduce the analyses and figures. Best choice if you just want to reproduce our analyses and figures, but does not want to apply them to your own data.
+8. tutorial.pdf -> knit version of the tutorial provided in "tutorial.Rmd". Best choice if are not familiar with R, and would like to just take a look at how our paper was cooked.
 
-9. tutorial.pdf -> knit version of the tutorial provided in "tutorial.Rmd". Best choice if are not familiar with R, and would like to just take a look at how our paper was made.
+9. tutorial.Rmd -> a tutorial written in RMarkDown to help you reproduce the analyses and figures. Best choice if you just want to reproduce our results, but does not want to apply them to your own data.
 
 
 ## Instructions

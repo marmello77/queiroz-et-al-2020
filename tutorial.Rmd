@@ -1,6 +1,5 @@
 ---
 title: "Queiroz et al. 2020"
-author: "Marco Mello"
 date: "10/6/2020"
 output: pdf_document
 ---
@@ -21,7 +20,7 @@ Authors: Joel A. Queiroz, Ugo M. Diniz, Diego P. Vázquez, Zelma M. Quirino, Fra
 
 See [README](https://github.com/marmello77/queiroz_et_al_2020/blob/main/README.md) for further info.
 
-This tutorial is aimed at facilitating full reproductibility of the analyses and figures presented in our paper.
+This tutorial is aimed at the reproducibility of the analyses and figures presented in our paper. Please follow the steps described in each section, to see how each figure was drawn. Use the summary below to navigate through the sections.
 
 
 ## Summary
@@ -47,6 +46,8 @@ This tutorial is aimed at facilitating full reproductibility of the analyses and
 
 
 ## Set the stage{#stage}
+
+First, you will have to get ready for running the code provided here.
 
 Set the working directory:
 
@@ -89,6 +90,13 @@ source("MyDiamond.R")
 
 
 ## Process the network{#process}
+
+
+Set a seed to make the results reproducible:
+
+```{r}
+set.seed(14)
+```
 
 
 Import the network:
@@ -240,7 +248,7 @@ plot(data2.lou,
      vertex.size=7.5,
      vertex.label=V(data2)$name,
      vertex.label.color="white",
-     vertex.label.cex=.6,
+     vertex.label.cex=.3,
      edge.color = adjustcolor("grey", alpha.f = .5),
      edge.curved=0.3,
      edge.width = 3,
@@ -267,6 +275,8 @@ In the end, we are going to reproduce Figure S2, provided in the supplementary m
 First, set the number of permutations to be used in all null model analyses.
 
 Consider that this kind of analysis is very resource-consuming. So have in mind your comoputer's power and memory, before setting this value.
+
+In this tutorial, we have set the permutations to **10**, in order to make analysis and knitting run faster. In our paper, we have set it to 1000, as you can see in the script "analysis.R" provided in this repo.
 
 ```{r}
 permutations <- 10
@@ -777,7 +787,7 @@ anova(glm_pla_w, test = "Chisq")
 ################################################################################
 
 
-## SFigure S1{#sampling}
+## Figure S1{#sampling}
 
 
 Load the interaction data for the Chao1 estimator:
