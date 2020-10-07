@@ -95,9 +95,9 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 2. You can also run specific sections of the script to reproduce specific results, but beware of dependences between some sections.
 
-3. The analyses based on Monte Carlo simulations can be quite resource-consuming. Check your computer's power and memory before setting the number of permutations. If you want to analyze your own data for real, consider that you will need at least 1,000 permutations. If you want only to explore your data, 10 permutations will do it.
+3. The analyses based on null models can be quite resource-consuming. Check your computer's power and memory before setting the number of permutations. If you want to analyze your own data for real, consider that you will need at least 1,000 permutations. If you want only to explore your data, 10 permutations will do it.
 
-4. If have any questions, corrections, or suggestions, please feel free to open an *issue* or make a *pull request*.
+4. If you have any questions, corrections, or suggestions, please feel free to open an [issue](https://github.com/marmello77/queiroz-et-al-2020/issues) or make a [pull request](https://github.com/marmello77/queiroz-et-al-2020/pulls).
 
 5. Have fun!
 
