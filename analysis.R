@@ -399,25 +399,11 @@ plants <- read.xls("data/plants.xlsx", h=T) # reading compiled spreadsheet with 
 # Change reference level for GLMs
 ord <-  ordered(plants$Guild, levels = c("sphin", "chiro", "other"))
 
-# BC
+#Plot and export the panel
+tiff(filename="figures/centrality.tif", res = 300, width = 4000, height = 3000)
+theme_set(theme_gray(base_size = 24))
 
-tiff("figures/bc.tiff", width = 12, height = 15, units = "cm", res = 300)
-ggplot(plants, aes(x=ord, y=bc, fill=Guild)) + 
-  ylab("BC")+ xlab("")+ ylim(0, 0.15) +
-  scale_fill_manual(values=c("darkolivegreen1", "sandybrown", "orchid1"))+
-  geom_boxplot(width=0.5, color="black") +
-  theme_classic() +
-  theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
-        axis.title.y = element_text(color="black", face ="italic", size =23),
-        axis.text= element_text(color="black", size=19),
-        legend.position = "none")
-dev.off()
-
-# d'
-
-tiff("figures/d.tiff", width = 12, height = 15, units = "cm", res = 300)
-
-ggplot(plants, aes(x=ord, y=d, fill=Guild)) + 
+pd <- ggplot(plants, aes(x=ord, y=d, fill=Guild)) + 
   ylab("d'")+ xlab("")+ ylim(0, 0.8) +
   scale_fill_manual(values=c("darkolivegreen1", "sandybrown", "orchid1"))+
   geom_boxplot(width=0.5, color="black") +
@@ -425,15 +411,10 @@ ggplot(plants, aes(x=ord, y=d, fill=Guild)) +
   theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
         axis.title.y = element_text(color="black", face ="italic", size =23),
         axis.text= element_text(color="black", size=19),
-        legend.position = "none")
+        legend.position = "none") +
+  geom_text(x="other", y=0.8, label="A", size = 10)
 
-dev.off()
-
-# ND
-
-tiff("figures/nk.tiff", width = 12, height = 15, units = "cm", res = 300)
-
-ggplot(plants, aes(x=ord, y=nk, fill=Guild)) + 
+pnk <- ggplot(plants, aes(x=ord, y=nk, fill=Guild)) + 
   ylab("nk")+ xlab("")+ ylim(0, 1.1) +
   scale_fill_manual(values=c("darkolivegreen1", "sandybrown", "orchid1"))+
   geom_boxplot(width=0.5, color="black") +
@@ -441,8 +422,23 @@ ggplot(plants, aes(x=ord, y=nk, fill=Guild)) +
   theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
         axis.title.y = element_text(color="black", face ="italic", size =23),
         axis.text= element_text(color="black", size=19),
-        legend.position = "none")
+        legend.position = "none") +
+  geom_text(x="other", y=1.1, label="B", size = 10)
 
+pBC <- ggplot(plants, aes(x=ord, y=bc, fill=Guild)) + 
+  ylab("BC")+ xlab("")+ ylim(0, 0.15) +
+  scale_fill_manual(values=c("darkolivegreen1", "sandybrown", "orchid1"))+
+  geom_boxplot(width=0.5, color="black") +
+  theme_classic() +
+  theme(panel.border = element_rect(colour = "black", fill=NA, size=.5) ,
+        axis.title.y = element_text(color="black", face ="italic", size =23),
+        axis.text= element_text(color="black", size=19),
+        legend.position = "none") +
+  geom_text(x="other", y=0.15, label="C", size = 10)
+
+grid.arrange(pd, pnk, pBC, 
+             ncol=3,  
+             vp=viewport(width=1.0, height=0.9))
 dev.off()
 
 

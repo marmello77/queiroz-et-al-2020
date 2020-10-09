@@ -48,19 +48,15 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 2. figures (folder)
 
-    a. bc.tiff -> boxplot of betweenness centrality by pollination syndrome.
+    a. centrality.tiff -> boxplots of centrality by pollinatiom syndrome.
     
     b. compound.png -> matrix of the nocturnal pollination network.
 
-    c. d.tiff -> boxplot of specialization (d') by pollination syndrome.
-    
-    d. morph.tiff -> boxplot comparing morphometric data between network modules.
+    c. morph.tiff -> boxplot comparing morphometric data between network modules.
 
-    e. network.tif -> graph of the nocturnal pollination network.
+    d. network.tif -> graph of the nocturnal pollination network.
 
-    f. nk.tiff -> boxplot of normalized degree by pollination syndrome.
-
-    g. sampling.tiff -> rarefaction curves representing interaction sampling completeness.
+    e. sampling.tiff -> rarefaction curves representing interaction sampling completeness.
 
 
 3. results (folder)
