@@ -1,6 +1,5 @@
 ---
 title: "Queiroz et al. 2020"
-date: "10/6/2020"
 output: pdf_document
 ---
 
