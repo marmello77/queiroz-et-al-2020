@@ -94,6 +94,8 @@ E(data2)$width = E(data2)$weight/5+1
 
 #Import "diamond" vertex shape
 source("MyDiamond.R")
+add_shape("diamond", clip=shapes("circle")$clip,
+          plot=MyDiamond)
 
 #Set vertex shapes
 V(data2)$shape = V(data2)$set
