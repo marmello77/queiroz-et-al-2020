@@ -74,7 +74,7 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 4. analysis.R -> main script to run the analyses and plot the graphs. Best choice if you want not only to reproduce our analyses and figures, but also to aplly our solutions to your own data.
 
-5. MyDiamond.R -> additional function to create the diamond shape used in "network.tif". We found this script on the internet some years ago, and could not identify its authors. We thank the person who wrote it, whomever it may be.
+5. MyDiamond.R -> additional function to create the diamond shape used in "network.tif". Provided in the [igraph manual](https://igraph.org/r/doc/shapes.html).
 
 6. PosteriorProb.R -> additional function to calculate restricted probabilities to be used in the compound topology analysis. See the original [repo](https://github.com/gabrielmfelix/Restricted-Null-Model).
 

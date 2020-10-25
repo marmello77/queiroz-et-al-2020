@@ -218,21 +218,25 @@ V(data2)$shape = gsub("Plants","circle",V(data2)$shape)
 ```
 
 
-Calculate the Louvain modularity (resolution = 1.0). 
-
-At this resolution, this algorithm gives very similar results as DIRT_LPA+ (Beckett modularity). Nevertheless, by running this analysis with the *igraph* package, it is easier to plot the graph with clouds representing the modules. We did not find a similar solution using outputs from the *bipartite* package.
+Calculate DIRTLPAwb+ modularity, and save the output as a data frame and a list:
 
 ```{r}
-data2.lou = cluster_louvain(data2)
+data.mod <- computeModules(data, method = "Beckett")
+data.modules <- module2constraints(data.mod)
+
+data.df <- data.frame(c(rownames(data), colnames(data)), data.modules) 
+colnames(data.df) <- c("vertices", "modules")
+
+data.list <- split(data.df$vertices, data.df$modules)
 ```
 
 
 Set node and cloud colors by modularity:
 
 ```{r}
-colrs <- rainbow(length(data2.lou), alpha = 1.0, s = 1, v = 0.8)
-V(data2)$color <- colrs[data2.lou$membership]
-clouds = rainbow(length(data2.lou), alpha = 0.1)
+colors <- rainbow(length(data.list), alpha = 1.0, s = 1, v = 0.8)
+V(data2)$color <- colors[data.df$modules]
+clouds = colors
 ```
 
 
@@ -240,17 +244,17 @@ clouds = rainbow(length(data2.lou), alpha = 0.1)
 
 ```{r fig2, fig.height=10, fig.width=10, cache=FALSE, out.width='\\textwidth', fig.align='center'}
 par(mfrow=c(1,1),mar=c(1,1,1,5))
-plot(data2.lou,
-     data2,
+plot(data2,
      col = V(data2)$color,
-     mark.border="lightgrey", 
-     mark.col=clouds,
-     vertex.size=7.5,
-     vertex.label=V(data2)$name,
-     vertex.label.color="white",
-     vertex.label.cex=.3,
+     mark.groups = data.list,
+     mark.border = "lightgrey", 
+     mark.col = adjustcolor(clouds, alpha = 0.2),
+     vertex.size = 7.5,
+     vertex.label = V(data2)$name,
+     vertex.label.color = "white",
+     vertex.label.cex = .3,
      edge.color = adjustcolor("grey", alpha.f = .5),
-     edge.curved=0.3,
+     edge.curved = 0.3,
      edge.width = 3,
      layout=lay1)
 legend(x = 0.9,y = 1.0, legend = c("Bats", "Moths", "Plants"),

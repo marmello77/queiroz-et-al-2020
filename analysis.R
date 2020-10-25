@@ -93,7 +93,7 @@ E(data2)$arrow.mode = 0
 E(data2)$width = E(data2)$weight/5+1
 
 #Import "diamond" vertex shape
-source("MyTriangle.R")
+source("MyDiamond.R")
 
 #Set vertex shapes
 V(data2)$shape = V(data2)$set
@@ -101,34 +101,45 @@ V(data2)$shape = gsub("Bats","diamond",V(data2)$shape)
 V(data2)$shape = gsub("Moths","square",V(data2)$shape)
 V(data2)$shape = gsub("Plants","circle",V(data2)$shape)
 
-#Calculate Louvain modularity (resolution = 1.0, similar to DIRT_LPA+)
-data2.lou = cluster_louvain(data2)
+#Calculate DIRTLPAwb+ modularity and save the output as a data frame and a list
+data.mod <- computeModules(data, method = "Beckett")
+data.mod
+data.modules <- module2constraints(data.mod)
+data.modules
+
+data.df <- data.frame(c(rownames(data), colnames(data)), data.modules) 
+data.df
+colnames(data.df) <- c("vertices", "modules")
+
+data.df
+data.list <- split(data.df$vertices, data.df$modules)
+data.list
 
 ##Set node and cloud colors by modularity
-colrs <- rainbow(length(data2.lou), alpha = 1.0, s = 1, v = 0.8)
-V(data2)$color <- colrs[data2.lou$membership]
-clouds = rainbow(length(data2.lou), alpha = 0.1)
+colors <- rainbow(length(data.list), alpha = 1.0, s = 1, v = 0.8)
+V(data2)$color <- colors[data.df$modules]
+clouds = colors
 
 #Plot and export the graph
 tiff(filename= "figures/network.tif", res= 300, height= 3000, width= 3100)
 par(mfrow=c(1,1),mar=c(1,1,1,5))
-plot(data2.lou,
-     data2,
+plot(data2,
      col = V(data2)$color,
-     mark.border="lightgrey", 
-     mark.col=clouds,
-     vertex.size=7.5,
-     vertex.label=V(data2)$name,
-     vertex.label.color="white",
-     vertex.label.cex=.3,
+     mark.groups = data.list,
+     mark.border = "lightgrey", 
+     mark.col = adjustcolor(clouds, alpha = 0.2),
+     vertex.size = 7.5,
+     vertex.label = V(data2)$name,
+     vertex.label.color = "white",
+     vertex.label.cex = .3,
      edge.color = adjustcolor("grey", alpha.f = .5),
-     edge.curved=0.3,
+     edge.curved = 0.3,
      edge.width = 3,
      layout=lay1)
 legend(x = 0.9,y = 1.0, legend = c("Bats", "Moths", "Plants"),
-       pch = c(18,15,19),  title="Taxon",
+       pch = c(18,15,19),  title = "Taxon",
        text.col = "gray20", title.col = "black",
-       box.lwd = 0, cex = 2, col=c("grey", "grey", "grey"))
+       box.lwd = 0, cex = 2, col = c("grey", "grey", "grey"))
 par(mfrow=c(1,1))
 dev.off()
 
@@ -139,7 +150,9 @@ dev.off()
 ################################################################################
 
 #Set the number of permutations to be used in all null model analyses
-permutations <- 1000
+#Here we set a low value just for testing the script. In our paper we've set it
+# to 1,000.
+permutations <- 10
 
 #Generate randomized matrices
 nulls <- nullmodel(data, N=permutations, method="vaznull")
@@ -242,7 +255,8 @@ obs.com
 
 #Calculate constrained interaction probabilities considering the network's modular structure
 Pij <- PosteriorProb(M = data, 
-                     R.partitions = row.Part, C.partitions = col.Part, #Input the modular structured recovered from step 2
+                     R.partitions = row.Part, #Input the modular structured recovered from step 2
+                     C.partitions = col.Part, #Input the modular structured recovered from step 2
                      Prior.Pij = "degreeprob", #Choose the null model
                      Conditional.level = "modules") #Choose the kind of constraints
 
