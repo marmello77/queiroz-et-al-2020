@@ -1,6 +1,6 @@
 # queiroz_et_al_2020
 
-Supplement to the paper Queiroz *et al*. (2020, Biotropica).
+Supplement to the paper Queiroz *et al*. (2020, Biotropica, *accepted*).
 
 [Ecological Synthesis Lab](https://marcomellolab.wordpress.com) (SintECO).
 
