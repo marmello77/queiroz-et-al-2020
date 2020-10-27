@@ -100,7 +100,7 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 ## Original sources
 
-The codes used in this repo have borrowed solutions from other repos developed by or lab:
+The codes used in this repo have borrowed solutions from other repos developed by our lab:
 
 1. [network-significance](https://github.com/marmello77/network-significance)
 
