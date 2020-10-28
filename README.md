@@ -102,11 +102,13 @@ The data, scripts, and functions provided here aim at making or study fully repr
 
 The codes used in this repo have borrowed solutions from other repos developed by our lab:
 
-1. [network-significance](https://github.com/marmello77/network-significance)
+1. [network-drawing](https://github.com/marmello77/network-drawing)
 
-2. [Restricted-Null-Model](https://github.com/gabrielmfelix/Restricted-Null-Model)
+2. [network-significance](https://github.com/marmello77/network-significance)
 
-3. [ihsmodel](https://github.com/pinheirorbp/ihsmodel)
+3. [Restricted-Null-Model](https://github.com/gabrielmfelix/Restricted-Null-Model)
+
+4. [ihsmodel](https://github.com/pinheirorbp/ihsmodel)
 
 
 ## Acknowledgments
