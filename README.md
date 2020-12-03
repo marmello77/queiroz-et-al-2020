@@ -10,7 +10,7 @@ E-mail: marmello@usp.br.
 
 Published on October 2nd, 2020 (English version).
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4064012.svg)](https://doi.org/10.5281/zenodo.4064012)
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4131207.svg)](https://doi.org/10.5281/zenodo.4131207)
 
 
 Run in R version 4.0.2 (2020-06-22) -- "Taking Off Again".
