@@ -1,6 +1,6 @@
 # queiroz_et_al_2020
 
-Supplement to the paper Queiroz *et al*. (2020, Biotropica, *accepted*).
+Supplement to the paper Queiroz *et al*. [(2020, Biotropica, *early view*)](https://onlinelibrary.wiley.com/share/author/68FJGTTWV4WVFD388XBX?target=10.1111/btp.12902).
 
 [Ecological Synthesis Lab](https://marcomellolab.wordpress.com) (SintECO).
 
@@ -118,4 +118,4 @@ We thank our colleagues, who helped us at different stages of this project. Spec
 
 ## Reference
 
-Queiroz JA, Diniz UM, Vázquez DP, Quirino ZM, Santos FAR, Mello MAR, Machado IC. 2020. Bats and hawkmoths form mixed modules with flowering plants in a nocturnal interaction network. Biotropica, *accepted*.
+Queiroz JA, Diniz UM, Vázquez DP, Quirino ZM, Santos FAR, Mello MAR, Machado IC. 2020. [Bats and hawkmoths form mixed modules with flowering plants in a nocturnal interaction network](https://onlinelibrary.wiley.com/share/author/68FJGTTWV4WVFD388XBX?target=10.1111/btp.12902). Biotropica, *early view*.
